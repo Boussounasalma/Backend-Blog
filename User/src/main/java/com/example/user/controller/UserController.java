@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -55,6 +56,39 @@ public class UserController {
             return new ResponseEntity<>(au, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+    @GetMapping("/by-email")
+    public User getSuperuserByEmail(@RequestParam String email) {
+        return userService.findByEmail(email);
+    }
+
+    @PostMapping("/sendemail")
+    public void sendemail(@RequestParam(name = "email") String email , @RequestParam(name = "id")int id ) {
+
+        userService.sendemail(email,id);
+    };
+
+
+    @PutMapping("/updatePassword/{userId}")
+    public ResponseEntity<String> updatePassword(@PathVariable Long userId, @RequestBody Map<String, String> request) {
+        String password = request.get("Password");
+        User updatedUser = userService.updatePassword(userId, password);
+
+        if (updatedUser != null) {
+            return ResponseEntity.ok("Password updated successfully.");
+        } else {
+            return ResponseEntity.notFound().build(); // User not found
+        }
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<User> updatePassword(@PathVariable Long userId, @RequestBody User updatedUser) {
+        User updatedUserData = userService.updateUser(userId, updatedUser);
+        if (updatedUserData != null) {
+            return new ResponseEntity<>(updatedUserData, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }
