@@ -1,0 +1,16 @@
+server:
+    port: 8081
+
+spring:
+    application:
+        name: SERVICE-UTILISATEUR
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url:
+            jdbc:mysql://localhost:3306/userblog?createDatabaseIfNotExist=true
+        username: "root"
+        password: "root"
+    jpa:
+        hibernate:
+            ddl-auto: update
+        show-sql: true
